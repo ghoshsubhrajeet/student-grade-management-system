@@ -74,9 +74,9 @@ public class CsvIngestionServiceTest {
         assertEquals("123 Main St", alice.getAddress());
 
         // Check associated User creation
-        assertNotNull(alice.getUser());
-        assertEquals("alice.smith@pasadena.edu", alice.getUser().getUsername());
-        assertEquals(Role.STUDENT, alice.getUser().getRole());
+        Optional<User> userOpt = userRepository.findByUsername("alice.smith@pasadena.edu");
+        assertTrue(userOpt.isPresent());
+        assertEquals(Role.STUDENT, userOpt.get().getRole());
 
         // Check course creation
         Optional<Course> courseOpt = courseRepository.findByCourseCode("CIS101");

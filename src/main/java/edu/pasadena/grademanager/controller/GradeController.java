@@ -52,7 +52,7 @@ public class GradeController {
             List<Grade> grades = gradeRepository.findAll();
             return ResponseEntity.ok(grades);
         } else if (currentUser.getRole() == Role.STUDENT) {
-            Optional<Student> studentOpt = studentRepository.findByUser(currentUser);
+            Optional<Student> studentOpt = studentRepository.findByEmail(currentUser.getUsername());
             if (studentOpt.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Student profile not found for user: " + currentUser.getUsername());
             }

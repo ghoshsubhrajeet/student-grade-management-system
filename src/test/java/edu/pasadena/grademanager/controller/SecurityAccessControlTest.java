@@ -60,8 +60,8 @@ public class SecurityAccessControlTest {
         // 1. Create Users
         adminUser = User.builder().username("admin_test").password("password").role(Role.ADMIN).build();
         teacherUser = User.builder().username("teacher_test").password("password").role(Role.TEACHER).build();
-        studentUser1 = User.builder().username("student_test1").password("password").role(Role.STUDENT).build();
-        studentUser2 = User.builder().username("student_test2").password("password").role(Role.STUDENT).build();
+        studentUser1 = User.builder().username("alice@test.edu").password("password").role(Role.STUDENT).build();
+        studentUser2 = User.builder().username("bob@test.edu").password("password").role(Role.STUDENT).build();
 
         userRepository.save(adminUser);
         userRepository.save(teacherUser);
@@ -75,7 +75,6 @@ public class SecurityAccessControlTest {
                 .email("alice@test.edu")
                 .phoneNumber("111-222-3333")
                 .address("123 Elm St")
-                .user(studentUser1)
                 .build();
 
         studentProfile2 = Student.builder()
@@ -84,7 +83,6 @@ public class SecurityAccessControlTest {
                 .email("bob@test.edu")
                 .phoneNumber("444-555-6666")
                 .address("456 Oak St")
-                .user(studentUser2)
                 .build();
 
         studentRepository.save(studentProfile1);

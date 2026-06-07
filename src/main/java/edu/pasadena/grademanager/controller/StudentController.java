@@ -46,7 +46,7 @@ public class StudentController {
             List<Student> students = studentRepository.findAll();
             return ResponseEntity.ok(students);
         } else if (currentUser.getRole() == Role.STUDENT) {
-            Optional<Student> studentOpt = studentRepository.findByUser(currentUser);
+            Optional<Student> studentOpt = studentRepository.findByEmail(currentUser.getUsername());
             if (studentOpt.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body("Student profile not found for user: " + currentUser.getUsername());
@@ -74,7 +74,7 @@ public class StudentController {
         if (currentUser.getRole() == Role.ADMIN || currentUser.getRole() == Role.TEACHER) {
             return ResponseEntity.ok(student);
         } else if (currentUser.getRole() == Role.STUDENT) {
-            if (student.getUser() != null && student.getUser().getId().equals(currentUser.getId())) {
+            if (student.getEmail() != null && student.getEmail().equalsIgnoreCase(currentUser.getUsername())) {
                 return ResponseEntity.ok(student);
             } else {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
@@ -96,13 +96,6 @@ public class StudentController {
             return ResponseEntity.badRequest().body("Error: Email already exists.");
         }
 
-        // If a userId is passed, link it to the user
-        if (student.getUser() != null && student.getUser().getId() != null) {
-            Optional<User> userOpt = userRepository.findById(student.getUser().getId());
-            if (userOpt.isPresent()) {
-                student.setUser(userOpt.get());
-            }
-        }
 
         Student savedStudent = studentRepository.save(student);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedStudent);

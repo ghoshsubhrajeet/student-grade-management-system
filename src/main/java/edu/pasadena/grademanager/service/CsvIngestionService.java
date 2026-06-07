@@ -122,7 +122,6 @@ public class CsvIngestionService {
                                 .email(email)
                                 .phoneNumber(phoneNumber)
                                 .address(address)
-                                .user(user)
                                 .build();
                         student = studentRepository.save(student);
                         logs.add("Row " + rowNumber + ": Created new student " + firstName + " " + lastName + " with account.");

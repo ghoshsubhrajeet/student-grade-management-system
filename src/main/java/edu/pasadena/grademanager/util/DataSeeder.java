@@ -62,7 +62,6 @@ public class DataSeeder implements CommandLineRunner {
                         .email("student@pasadena.edu")
                         .phoneNumber("626-555-0199")
                         .address("1570 E Colorado Blvd, Pasadena, CA 91106")
-                        .user(studentUser)
                         .build();
                 studentRepository.save(studentProfile);
             }
