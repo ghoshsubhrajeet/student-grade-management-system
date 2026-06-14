@@ -104,6 +104,21 @@ public class SecurityAccessControlTest {
     }
 
     @Test
+    public void testGetGradesAsAdmin() throws Exception {
+        Course course = Course.builder().courseCode("CS101").courseName("Intro").build();
+        courseRepository.save(course);
+        Assignment assignment = Assignment.builder().course(course).title("HW1").maxPoints(100.0).build();
+        assignmentRepository.save(assignment);
+        Grade grade = Grade.builder().student(studentProfile1).assignment(assignment).score(90.0).feedback("Good").build();
+        gradeRepository.save(grade);
+
+        mockMvc.perform(get("/api/grades").with(user(adminUser)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)));
+    }
+
+
+    @Test
     public void testGetStudentsAsTeacher() throws Exception {
         mockMvc.perform(get("/api/students").with(user(teacherUser)))
                 .andExpect(status().isOk())

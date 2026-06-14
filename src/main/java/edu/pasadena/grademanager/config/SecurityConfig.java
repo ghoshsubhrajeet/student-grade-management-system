@@ -44,13 +44,13 @@ public class SecurityConfig {
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf
-                        .ignoringRequestMatchers(PathRequest.toH2Console())
+                        .ignoringRequestMatchers("/h2-console/**")
                         .disable()) // Disable CSRF for stateless REST APIs
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/index.html", "/login", "/unauthorized", "/dashboard", "/students", "/grades", "/users", "/assets/**", "/favicon.ico", "/vite.svg").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers(PathRequest.toH2Console()).permitAll()
+                        .requestMatchers("/h2-console/**").permitAll()
                         .anyRequest().authenticated())
                 .headers(headers -> headers
                         .frameOptions(frame -> frame.sameOrigin())); // Required for H2 Console
