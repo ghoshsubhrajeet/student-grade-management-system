@@ -2,7 +2,6 @@ package edu.pasadena.grademanager.config;
 
 import edu.pasadena.grademanager.security.JwtAuthFilter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.security.autoconfigure.web.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -48,7 +47,9 @@ public class SecurityConfig {
                         .disable()) // Disable CSRF for stateless REST APIs
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/index.html", "/login", "/unauthorized", "/dashboard", "/students", "/grades", "/users", "/assets/**", "/favicon.ico", "/vite.svg").permitAll()
+                        .requestMatchers("/", "/index.html", "/login", "/unauthorized", "/dashboard", "/students",
+                                "/grades", "/users", "/assets/**", "/favicon.ico", "/vite.svg", "/error")
+                        .permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
                         .anyRequest().authenticated())

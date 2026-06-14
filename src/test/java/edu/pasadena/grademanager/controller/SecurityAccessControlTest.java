@@ -207,4 +207,73 @@ public class SecurityAccessControlTest {
 
         assertTrue(studentRepository.findById(studentProfile1.getId()).isPresent());
     }
+
+    @Test
+    public void testDeleteStudentWhoHasAlreadyBeenRemovedFromUserProfilesAndHasGrades() throws Exception {
+        // Create a student user, student profile, course, assignment, and grade
+        User tempStudentUser = User.builder().username("temp@test.edu").password("password").role(Role.STUDENT).build();
+        userRepository.save(tempStudentUser);
+
+        Student tempStudentProfile = Student.builder()
+                .firstName("Temp")
+                .lastName("Student")
+                .email("temp@test.edu")
+                .build();
+        studentRepository.save(tempStudentProfile);
+
+        Course course = Course.builder().courseCode("CS102").courseName("Intro 2").build();
+        courseRepository.save(course);
+        Assignment assignment = Assignment.builder().course(course).title("HW2").maxPoints(100.0).build();
+        assignmentRepository.save(assignment);
+        Grade grade = Grade.builder().student(tempStudentProfile).assignment(assignment).score(85.0).feedback("Okay").build();
+        gradeRepository.save(grade);
+
+        // 1. Delete the user profile first (representing "already removed from the user profile")
+        userRepository.delete(tempStudentUser);
+        assertFalse(userRepository.findByUsername("temp@test.edu").isPresent());
+        assertTrue(studentRepository.findById(tempStudentProfile.getId()).isPresent());
+        assertEquals(1, gradeRepository.findByStudent(tempStudentProfile).size());
+
+        // 2. Delete the student profile
+        mockMvc.perform(delete("/api/students/" + tempStudentProfile.getId())
+                        .with(user(adminUser))
+                        .with(csrf()))
+                .andExpect(status().isOk());
+
+        // 3. Verify student profile and associated grades are deleted
+        assertFalse(studentRepository.findById(tempStudentProfile.getId()).isPresent());
+        assertEquals(0, gradeRepository.findByStudent(tempStudentProfile).size());
+    }
+
+    @Test
+    public void testDeleteStudentUserCascadesToStudentAndGrades() throws Exception {
+        // Create a student user, student profile, course, assignment, and grade
+        User tempStudentUser = User.builder().username("temp2@test.edu").password("password").role(Role.STUDENT).build();
+        userRepository.save(tempStudentUser);
+
+        Student tempStudentProfile = Student.builder()
+                .firstName("Temp2")
+                .lastName("Student2")
+                .email("temp2@test.edu")
+                .build();
+        studentRepository.save(tempStudentProfile);
+
+        Course course = Course.builder().courseCode("CS103").courseName("Intro 3").build();
+        courseRepository.save(course);
+        Assignment assignment = Assignment.builder().course(course).title("HW3").maxPoints(100.0).build();
+        assignmentRepository.save(assignment);
+        Grade grade = Grade.builder().student(tempStudentProfile).assignment(assignment).score(95.0).feedback("Great").build();
+        gradeRepository.save(grade);
+
+        // Delete the user profile directly
+        mockMvc.perform(delete("/api/users/" + tempStudentUser.getId())
+                        .with(user(adminUser))
+                        .with(csrf()))
+                .andExpect(status().isOk());
+
+        // Verify user, student profile, and grades are all deleted
+        assertFalse(userRepository.findById(tempStudentUser.getId()).isPresent());
+        assertFalse(studentRepository.findById(tempStudentProfile.getId()).isPresent());
+        assertEquals(0, gradeRepository.findByStudent(tempStudentProfile).size());
+    }
 }

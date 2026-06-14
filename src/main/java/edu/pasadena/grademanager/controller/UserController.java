@@ -9,6 +9,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import edu.pasadena.grademanager.model.Student;
+import edu.pasadena.grademanager.model.Grade;
+import edu.pasadena.grademanager.repository.StudentRepository;
+import edu.pasadena.grademanager.repository.GradeRepository;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -20,6 +25,12 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private StudentRepository studentRepository;
+
+    @Autowired
+    private GradeRepository gradeRepository;
 
     @Autowired
     private PasswordEncoder encoder;
@@ -65,13 +76,27 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
+    @Transactional
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         Optional<User> userOpt = userRepository.findById(id);
         if (userOpt.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
-        userRepository.delete(userOpt.get());
+        User user = userOpt.get();
+
+        // If the user has the Role of STUDENT, also delete the student profile and their grades
+        if (user.getRole() == Role.STUDENT) {
+            Optional<Student> studentOpt = studentRepository.findByEmail(user.getUsername());
+            if (studentOpt.isPresent()) {
+                Student student = studentOpt.get();
+                List<Grade> grades = gradeRepository.findByStudent(student);
+                gradeRepository.deleteAll(grades);
+                studentRepository.delete(student);
+            }
+        }
+
+        userRepository.delete(user);
         return ResponseEntity.ok("User deleted successfully.");
     }
 }

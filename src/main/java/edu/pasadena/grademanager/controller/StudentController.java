@@ -13,6 +13,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import edu.pasadena.grademanager.model.Grade;
+import edu.pasadena.grademanager.repository.GradeRepository;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +28,9 @@ public class StudentController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private GradeRepository gradeRepository;
 
     private User getCurrentUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -144,12 +150,25 @@ public class StudentController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
     public ResponseEntity<?> deleteStudent(@PathVariable Long id) {
         Optional<Student> studentOpt = studentRepository.findById(id);
         if (studentOpt.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        studentRepository.delete(studentOpt.get());
+        Student student = studentOpt.get();
+
+        // 1. Delete associated grades first to avoid constraint violation
+        List<Grade> grades = gradeRepository.findByStudent(student);
+        gradeRepository.deleteAll(grades);
+
+        // 2. Delete associated user profile if it exists (using student email as username)
+        Optional<User> userOpt = userRepository.findByUsername(student.getEmail());
+        userOpt.ifPresent(user -> userRepository.delete(user));
+
+        // 3. Delete student profile
+        studentRepository.delete(student);
+        
         return ResponseEntity.ok().body("Student profile deleted successfully.");
     }
 }
