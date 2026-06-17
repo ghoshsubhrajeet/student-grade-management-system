@@ -230,7 +230,7 @@ const styles = {
   spinner: {
     width: '40px',
     height: '40px',
-    border: '3px solid rgba(255, 255, 255, 0.1)',
+    border: '3px solid var(--border-glass)',
     borderTopColor: 'var(--primary)',
     borderRadius: '50%',
     animation: 'spin 1s linear infinite',
@@ -242,7 +242,7 @@ const styles = {
   welcomeTitle: {
     fontSize: '22px',
     fontWeight: '700',
-    color: '#fff',
+    color: 'var(--text-main)',
     margin: 0,
   },
   welcomeSub: {
@@ -270,7 +270,7 @@ const styles = {
   actionsTitle: {
     fontSize: '16px',
     fontWeight: '600',
-    color: '#fff',
+    color: 'var(--text-main)',
     margin: 0,
   },
   actionsList: {
@@ -284,7 +284,7 @@ const styles = {
     alignItems: 'center',
     padding: '14px 16px',
     borderRadius: '10px',
-    backgroundColor: 'rgba(255,255,255,0.02)',
+    backgroundColor: 'var(--bg-subtle)',
     border: '1px solid var(--border-glass)',
     color: 'var(--text-muted)',
     textDecoration: 'none',

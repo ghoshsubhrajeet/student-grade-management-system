@@ -326,7 +326,7 @@ const styles = {
   title: {
     fontSize: '22px',
     fontWeight: '700',
-    color: '#fff',
+    color: 'var(--text-main)',
     margin: 0,
   },
   subtitle: {
@@ -405,7 +405,7 @@ const styles = {
   },
   modalTitle: {
     fontSize: '18px',
-    color: '#fff',
+    color: 'var(--text-main)',
     fontWeight: '600',
     marginBottom: '20px',
     textAlign: 'left',

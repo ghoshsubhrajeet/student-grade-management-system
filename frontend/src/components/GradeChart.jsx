@@ -65,7 +65,7 @@ export default function GradeChart({ grades, title }) {
                   y1={y} 
                   x2={width - paddingRight} 
                   y2={y} 
-                  stroke="rgba(255,255,255,0.06)" 
+                  stroke="var(--border-glass)" 
                   strokeDasharray="4,4"
                 />
                 <text 
@@ -112,7 +112,7 @@ export default function GradeChart({ grades, title }) {
                   y={paddingTop} 
                   width={barWidth} 
                   height={chartHeight} 
-                  fill="rgba(255,255,255,0.02)" 
+                  fill="var(--bg-subtle)" 
                   rx="6"
                 />
                 {/* Active value bar */}
@@ -128,7 +128,7 @@ export default function GradeChart({ grades, title }) {
                 <text 
                   x={x + barWidth / 2} 
                   y={y - 8} 
-                  fill="#fff" 
+                  fill="var(--text-main)" 
                   fontSize="12" 
                   fontWeight="600"
                   textAnchor="middle"
@@ -177,7 +177,7 @@ const styles = {
   title: {
     fontSize: '16px',
     fontWeight: '600',
-    color: '#fff',
+    color: 'var(--text-main)',
     margin: 0,
   },
   chartWrapper: {

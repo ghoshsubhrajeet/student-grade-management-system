@@ -170,7 +170,7 @@ const styles = {
   title: {
     fontSize: '16px',
     fontWeight: '600',
-    color: '#fff',
+    color: 'var(--text-main)',
     margin: 0,
   },
   dropzone: {
@@ -191,7 +191,7 @@ const styles = {
   dropText: {
     fontSize: '14px',
     fontWeight: '500',
-    color: '#fff',
+    color: 'var(--text-main)',
   },
   helpText: {
     fontSize: '11px',

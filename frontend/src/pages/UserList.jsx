@@ -148,7 +148,7 @@ export default function UserList() {
                   {users.map(u => (
                     <tr key={u.id}>
                       <td style={{ color: 'var(--text-muted)', fontFamily: 'monospace' }}>#{u.id}</td>
-                      <td style={{ fontWeight: '500', color: '#fff' }}>{u.username}</td>
+                      <td style={{ fontWeight: '500', color: 'var(--text-main)' }}>{u.username}</td>
                       <td>
                         <span className={`badge ${getRoleBadgeClass(u.role)}`}>{u.role}</span>
                       </td>
@@ -265,7 +265,7 @@ const styles = {
   title: {
     fontSize: '22px',
     fontWeight: '700',
-    color: '#fff',
+    color: 'var(--text-main)',
     margin: 0,
   },
   subtitle: {
@@ -316,7 +316,7 @@ const styles = {
   },
   modalTitle: {
     fontSize: '18px',
-    color: '#fff',
+    color: 'var(--text-main)',
     fontWeight: '600',
     marginBottom: '20px',
     textAlign: 'left',

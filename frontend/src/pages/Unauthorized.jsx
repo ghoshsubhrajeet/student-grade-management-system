@@ -71,7 +71,7 @@ const styles = {
   title: {
     fontSize: '20px',
     fontWeight: '700',
-    color: '#fff',
+    color: 'var(--text-main)',
     margin: 0,
   },
   text: {

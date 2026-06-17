@@ -152,7 +152,7 @@ const styles = {
   title: {
     fontSize: '22px',
     fontWeight: '700',
-    color: '#fff',
+    color: 'var(--text-main)',
     margin: 0,
   },
   subtitle: {
@@ -169,7 +169,7 @@ const styles = {
   },
   formTitle: {
     fontSize: '18px',
-    color: '#fff',
+    color: 'var(--text-main)',
     fontWeight: '600',
     marginBottom: '24px',
   },
@@ -211,7 +211,7 @@ const styles = {
   spinner: {
     width: '16px',
     height: '16px',
-    border: '2px solid rgba(255, 255, 255, 0.1)',
+    border: '2px solid var(--border-glass)',
     borderTopColor: '#fff',
     borderRadius: '50%',
     animation: 'spin 1s linear infinite',

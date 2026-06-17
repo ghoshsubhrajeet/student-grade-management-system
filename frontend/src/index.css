@@ -7,6 +7,7 @@
   --bg-card-hover: rgba(28, 36, 58, 0.85);
   --bg-sidebar: rgba(13, 18, 30, 0.9);
   --bg-input: rgba(13, 18, 30, 0.5);
+  --bg-subtle: rgba(255, 255, 255, 0.02);
   
   --border-glass: rgba(255, 255, 255, 0.06);
   --border-glass-active: rgba(139, 92, 246, 0.4);
@@ -33,6 +34,34 @@
   color-scheme: dark;
 }
 
+body.light-theme {
+  --bg-dark: #f1f5f9;
+  --bg-card: rgba(255, 255, 255, 0.7);
+  --bg-card-hover: rgba(255, 255, 255, 0.9);
+  --bg-sidebar: rgba(248, 250, 252, 0.95);
+  --bg-input: rgba(255, 255, 255, 0.85);
+  --bg-subtle: rgba(15, 23, 42, 0.02);
+  
+  --border-glass: rgba(15, 23, 42, 0.08);
+  --border-glass-active: rgba(124, 58, 237, 0.5);
+  
+  --primary: #6d28d9;
+  --primary-glow: rgba(109, 40, 217, 0.15);
+  --secondary: #db2777;
+  --accent-teal: #0891b2;
+  --accent-teal-glow: rgba(8, 145, 178, 0.15);
+  
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --text-dark: #64748b;
+  
+  --success: #059669;
+  --error: #dc2626;
+  --warning: #d97706;
+
+  color-scheme: light;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -47,6 +76,10 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+body.light-theme {
+  background: radial-gradient(circle at 10% 20%, #f8fafc 0%, #e2e8f0 100%);
 }
 
 #root {
@@ -70,6 +103,10 @@ body {
   border-radius: 4px;
 }
 
+body.light-theme ::-webkit-scrollbar-thumb {
+  background: rgba(15, 23, 42, 0.15);
+}
+
 ::-webkit-scrollbar-thumb:hover {
   background: var(--primary);
 }
@@ -87,6 +124,10 @@ body {
 .glass-panel:hover {
   background: var(--bg-card-hover);
   border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.light-theme .glass-panel:hover {
+  border-color: rgba(15, 23, 42, 0.15);
 }
 
 /* Buttons */
@@ -129,6 +170,10 @@ body {
 .btn-secondary:hover {
   background: rgba(255, 255, 255, 0.05);
   border-color: var(--text-muted);
+}
+
+body.light-theme .btn-secondary:hover {
+  background: rgba(15, 23, 42, 0.05);
 }
 
 .btn-danger {
@@ -216,7 +261,7 @@ body {
 }
 
 .custom-table th {
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--bg-subtle);
   color: var(--text-muted);
   font-weight: 600;
   padding: 14px 16px;
@@ -231,7 +276,7 @@ body {
 }
 
 .custom-table tbody tr:hover {
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--bg-subtle);
 }
 
 /* Badges for roles / status */
@@ -298,7 +343,7 @@ body {
 .stat-info p {
   font-size: 28px;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-main);
 }
 
 /* Modal Dialog */
@@ -315,6 +360,10 @@ body {
   justify-content: center;
   z-index: 1000;
   animation: fadeIn 0.2s ease-out;
+}
+
+body.light-theme .modal-overlay {
+  background: rgba(15, 23, 42, 0.4);
 }
 
 .modal-content {

@@ -138,7 +138,7 @@ export default function GradeList() {
                     </div>
                     <h4 style={styles.assignmentTitle}>{grade.assignment?.title || 'Assignment'}</h4>
                     <p style={styles.scoreText}>
-                      Score: <strong style={{ color: '#fff' }}>{grade.score}</strong> / {max}
+                      Score: <strong style={{ color: 'var(--text-main)' }}>{grade.score}</strong> / {max}
                     </p>
                     {grade.feedback ? (
                       <div style={styles.feedbackBox}>
@@ -181,7 +181,7 @@ export default function GradeList() {
                         <td style={{ fontWeight: '500' }}>{studentName}</td>
                         <td>{grade.assignment?.course?.courseCode || 'N/A'}</td>
                         <td>{grade.assignment?.title || 'N/A'}</td>
-                        <td style={{ fontWeight: '600', color: '#fff' }}>{grade.score}</td>
+                        <td style={{ fontWeight: '600', color: 'var(--text-main)' }}>{grade.score}</td>
                         <td>{max}</td>
                         <td>
                           <span style={{ ...styles.gridPercentage, color: getPercentageColor(percentage) }}>
@@ -279,7 +279,7 @@ const styles = {
   title: {
     fontSize: '22px',
     fontWeight: '700',
-    color: '#fff',
+    color: 'var(--text-main)',
     margin: 0,
   },
   subtitle: {
@@ -347,7 +347,7 @@ const styles = {
   assignmentTitle: {
     fontSize: '16px',
     fontWeight: '600',
-    color: '#fff',
+    color: 'var(--text-main)',
     margin: 0,
   },
   scoreText: {
@@ -357,7 +357,7 @@ const styles = {
   feedbackBox: {
     marginTop: '8px',
     padding: '10px 12px',
-    background: 'rgba(255,255,255,0.01)',
+    background: 'var(--bg-subtle)',
     borderRadius: '6px',
     borderLeft: '2px solid var(--primary)',
   },
@@ -394,7 +394,7 @@ const styles = {
   },
   modalTitle: {
     fontSize: '18px',
-    color: '#fff',
+    color: 'var(--text-main)',
     fontWeight: '600',
     marginBottom: '4px',
     textAlign: 'left',
