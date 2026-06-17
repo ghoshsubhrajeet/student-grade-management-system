@@ -82,7 +82,7 @@ export default function Dashboard() {
     if (user) {
       fetchDashboardData();
     }
-  }, [user.role]);
+  }, [user?.role]);
 
   if (loading) {
     return (

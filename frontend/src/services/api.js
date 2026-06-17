@@ -76,6 +76,15 @@ export const api = {
     return handleResponse(response);
   },
 
+  async changePassword(oldPassword, newPassword) {
+    const response = await fetch(`${BASE_URL}/api/auth/change-password`, {
+      method: 'POST',
+      headers: getHeaders(),
+      body: JSON.stringify({ oldPassword, newPassword }),
+    });
+    return handleResponse(response);
+  },
+
   // Students
   async getStudents() {
     const response = await fetch(`${BASE_URL}/api/students`, {

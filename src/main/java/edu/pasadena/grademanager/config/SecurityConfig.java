@@ -50,6 +50,7 @@ public class SecurityConfig {
                         .requestMatchers("/", "/index.html", "/login", "/unauthorized", "/dashboard", "/students",
                                 "/grades", "/users", "/assets/**", "/favicon.ico", "/vite.svg", "/error")
                         .permitAll()
+                        .requestMatchers("/api/auth/change-password").authenticated()
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
                         .anyRequest().authenticated())

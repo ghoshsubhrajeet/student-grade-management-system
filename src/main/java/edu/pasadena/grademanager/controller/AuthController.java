@@ -18,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.util.Optional;
+import edu.pasadena.grademanager.dto.ChangePasswordRequest;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -80,4 +82,29 @@ public class AuthController {
 
         return ResponseEntity.ok(Map.of("message", "User registered successfully!"));
     }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePasswordRequest request, Authentication authentication) {
+        if (authentication == null) {
+            return ResponseEntity.status(401).body(Map.of("message", "Error: Unauthorized"));
+        }
+
+        User user = (User) authentication.getPrincipal();
+        Optional<User> userOpt = userRepository.findByUsername(user.getUsername());
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.status(404).body(Map.of("message", "Error: User not found"));
+        }
+
+        User dbUser = userOpt.get();
+
+        if (!encoder.matches(request.getOldPassword(), dbUser.getPassword())) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Error: Incorrect current password."));
+        }
+
+        dbUser.setPassword(encoder.encode(request.getNewPassword()));
+        userRepository.save(dbUser);
+
+        return ResponseEntity.ok(Map.of("message", "Password changed successfully!"));
+    }
 }
+

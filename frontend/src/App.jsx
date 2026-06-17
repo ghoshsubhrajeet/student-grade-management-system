@@ -9,6 +9,7 @@ import StudentList from './pages/StudentList';
 import GradeList from './pages/GradeList';
 import UserList from './pages/UserList';
 import Unauthorized from './pages/Unauthorized';
+import ChangePassword from './pages/ChangePassword';
 
 // Helper component for protecting routes by login state and user role
 function ProtectedRoute({ children, allowedRoles }) {
@@ -88,6 +89,16 @@ export default function App() {
           element={
             <ProtectedRoute allowedRoles={['ADMIN']}>
               <UserList />
+            </ProtectedRoute>
+          } 
+        />
+
+        {/* Protected Change Password */}
+        <Route 
+          path="/change-password" 
+          element={
+            <ProtectedRoute>
+              <ChangePassword />
             </ProtectedRoute>
           } 
         />

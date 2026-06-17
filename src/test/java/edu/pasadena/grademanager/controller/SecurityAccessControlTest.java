@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -26,6 +27,9 @@ public class SecurityAccessControlTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private UserRepository userRepository;
@@ -58,10 +62,11 @@ public class SecurityAccessControlTest {
         userRepository.deleteAll();
 
         // 1. Create Users
-        adminUser = User.builder().username("admin_test").password("password").role(Role.ADMIN).build();
-        teacherUser = User.builder().username("teacher_test").password("password").role(Role.TEACHER).build();
-        studentUser1 = User.builder().username("alice@test.edu").password("password").role(Role.STUDENT).build();
-        studentUser2 = User.builder().username("bob@test.edu").password("password").role(Role.STUDENT).build();
+        String enc = passwordEncoder.encode("password");
+        adminUser = User.builder().username("admin_test").password(enc).role(Role.ADMIN).build();
+        teacherUser = User.builder().username("teacher_test").password(enc).role(Role.TEACHER).build();
+        studentUser1 = User.builder().username("alice@test.edu").password(enc).role(Role.STUDENT).build();
+        studentUser2 = User.builder().username("bob@test.edu").password(enc).role(Role.STUDENT).build();
 
         userRepository.save(adminUser);
         userRepository.save(teacherUser);
@@ -276,4 +281,53 @@ public class SecurityAccessControlTest {
         assertFalse(studentRepository.findById(tempStudentProfile.getId()).isPresent());
         assertEquals(0, gradeRepository.findByStudent(tempStudentProfile).size());
     }
+
+    @Test
+    public void testChangePasswordUnauthenticated() throws Exception {
+        String payload = "{\"oldPassword\":\"password\",\"newPassword\":\"newpassword\"}";
+        mockMvc.perform(post("/api/auth/change-password")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(payload)
+                        .with(csrf()))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void testChangePasswordIncorrectCurrentPassword() throws Exception {
+        String payload = "{\"oldPassword\":\"wrongpassword\",\"newPassword\":\"newpassword\"}";
+        mockMvc.perform(post("/api/auth/change-password")
+                        .with(user(studentUser1))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(payload)
+                        .with(csrf()))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message", is("Error: Incorrect current password.")));
+    }
+
+    @Test
+    public void testChangePasswordValidationShortPassword() throws Exception {
+        String payload = "{\"oldPassword\":\"password\",\"newPassword\":\"123\"}";
+        mockMvc.perform(post("/api/auth/change-password")
+                        .with(user(studentUser1))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(payload)
+                        .with(csrf()))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testChangePasswordSuccess() throws Exception {
+        String payload = "{\"oldPassword\":\"password\",\"newPassword\":\"newpassword\"}";
+        mockMvc.perform(post("/api/auth/change-password")
+                        .with(user(studentUser1))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(payload)
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message", is("Password changed successfully!")));
+
+        User updatedUser = userRepository.findByUsername(studentUser1.getUsername()).orElseThrow();
+        assertTrue(passwordEncoder.matches("newpassword", updatedUser.getPassword()));
+    }
 }
+
